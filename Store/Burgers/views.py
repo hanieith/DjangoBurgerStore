@@ -20,7 +20,7 @@ class Home(ListView):
 class PostsByCategory(ListView):
     template_name = 'Burgers/category_list.html'
     context_object_name = 'posts'
-    paginate_by = 2
+    paginate_by = 4
     allow_empty = False
 
     def get_queryset(self):
@@ -32,7 +32,18 @@ class PostsByCategory(ListView):
         return context
 
 class PostsByTag(ListView):
-    pass
+    template_name = 'Burgers/tag_list.html'
+    context_object_name = 'posts'
+    paginate_by = 4
+    allow_empty = False
+
+    def get_queryset(self):
+        return Post.objects.filter(tags__slug=self.kwargs['slug'])
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Записи по тегу: ' + str(Tag.objects.get(slug=self.kwargs['slug']))
+        return context
 
 
 class GetPost(DetailView):
