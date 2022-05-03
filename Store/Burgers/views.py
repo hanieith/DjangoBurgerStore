@@ -14,12 +14,20 @@ class Home(ListView):
         context['title'] = 'Classic Blog Design'
         return context
 
+class PostsByCategory(ListView):
+    template_name = 'Burgers/category_list.html'
+    context_object_name = 'posts'
+    paginate_by = 2
+    allow_empty = False
 
-def index(request):
-    return render(request, 'Burgers/index.html')
+    def get_queryset(self):
+        return Post.objects.filter(category__slug=self.kwargs['slug'])
 
-def get_category(request, slug):
-    return render(request, 'Burgers/category.html')
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = Category.objects.get(slug=self.kwargs['slug'])
+        return context
+
 
 def get_post(request, slug):
     return render(request, 'Burgers/category.html')
