@@ -31,6 +31,9 @@ class PostsByCategory(ListView):
         context['title'] = Category.objects.get(slug=self.kwargs['slug'])
         return context
 
+class PostsByTag(ListView):
+    pass
+
 
 class GetPost(DetailView):
     model = Post
