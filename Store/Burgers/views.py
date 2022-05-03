@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.generic import ListView, DetailView
 from .models import *
+from django.db.models import F
+
 
 class Home(ListView):
     model = Post
@@ -13,6 +15,7 @@ class Home(ListView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Classic Blog Design'
         return context
+
 
 class PostsByCategory(ListView):
     template_name = 'Burgers/category_list.html'
@@ -29,5 +32,14 @@ class PostsByCategory(ListView):
         return context
 
 
-def get_post(request, slug):
-    return render(request, 'Burgers/category.html')
+class GetPost(DetailView):
+    model = Post
+    template_name = 'Burgers/single_post.html'
+    context_object_name = 'post'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        self.object.views = F('views') + 1
+        self.object.save()
+        self.object.refresh_from_db()
+        return context
