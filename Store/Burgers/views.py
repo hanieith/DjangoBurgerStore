@@ -16,6 +16,9 @@ class Home(ListView):
         context['title'] = 'Classic Blog Design'
         return context
 
+    def get_queryset(self):
+        return Post.objects.filter(is_pinned=False)
+
 
 class PostsByCategory(ListView):
     template_name = 'Burgers/category_list.html'

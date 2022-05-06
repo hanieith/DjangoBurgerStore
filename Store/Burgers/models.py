@@ -42,6 +42,7 @@ class Post(models.Model):
     views = models.IntegerField(default=0, verbose_name='кол-во просмотров')
     category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='posts')
     tags = models.ManyToManyField(Tag, blank=True, related_name='posts')
+    is_pinned = models.BooleanField(default=False, verbose_name='закрепленно?')
 
     def __str__(self):
         return self.title
