@@ -7,7 +7,7 @@
         </div>
         <div class="big-text">
             <h3><a href="{{ post.get_absolute_url }}">{{ post.title }}.</a></h3>
-            <p>{{ post.content|truncatewords_html:40|safe }}</p>
+            <p>{{ post.content|truncatewords_html:90|safe }}</p>
             <h4><span class="date">{{post.created_at|date:"d.m.Y"}}</span><span class="author">Posted By: <span
                     class="author-name">{{ post.author }}</span></span>
             </h4>

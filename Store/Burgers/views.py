@@ -1,8 +1,9 @@
-from django.shortcuts import render
-from django.http import HttpResponse
 from django.views.generic import ListView, DetailView
 from .models import *
 from django.db.models import F
+from rest_framework import generics, viewsets
+from .serializers import *
+from rest_framework.pagination import PageNumberPagination
 
 
 class Home(ListView):
@@ -34,6 +35,7 @@ class PostsByCategory(ListView):
         context['title'] = Category.objects.get(slug=self.kwargs['slug'])
         return context
 
+
 class PostsByTag(ListView):
     template_name = 'Burgers/tag_list.html'
     context_object_name = 'posts'
@@ -61,6 +63,7 @@ class GetPost(DetailView):
         self.object.refresh_from_db()
         return context
 
+
 class Search(ListView):
     template_name = 'Burgers/search.html'
     context_object_name = 'posts'
@@ -73,3 +76,25 @@ class Search(ListView):
         context = super().get_context_data(**kwargs)
         context['s'] = f"s={self.request.GET.get('s')}&"
         return context
+
+
+# API
+
+class PostViewPagination(PageNumberPagination):
+    page_size = 2
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
+
+class PostViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    pagination_class = PostViewPagination
+
+# class PostApiView(generics.ListAPIView):
+#    queryset = Post.objects.all()
+#    serializer_class = PostSerializer
+#
+# class OnePostApiView(generics.RetrieveAPIView):
+#    queryset = Post.objects.all()
+#   serializer_class = PostSerializer
