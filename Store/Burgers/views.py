@@ -86,15 +86,42 @@ class PostViewPagination(PageNumberPagination):
     max_page_size = 100
 
 
-class PostViewSet(viewsets.ReadOnlyModelViewSet):
+class CategoryApiView(generics.ListAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+class OneCategoryApiView(generics.ListAPIView):
+    queryset = Category.objects.all()
+    serializer_class = PostSerializer
+
+    def get_queryset(self):
+        pk = self.kwargs.get('pk')
+        if not pk:
+            return Category.objects.all()
+        else:
+            return Post.objects.filter(category__pk=self.kwargs['pk'])
+
+class PostApiView(generics.ListAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     pagination_class = PostViewPagination
 
-# class PostApiView(generics.ListAPIView):
-#    queryset = Post.objects.all()
-#    serializer_class = PostSerializer
-#
-# class OnePostApiView(generics.RetrieveAPIView):
-#    queryset = Post.objects.all()
-#   serializer_class = PostSerializer
+class OnePostApiView(generics.RetrieveAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+
+
+class TagApiView(generics.ListAPIView):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
+
+class OneTagApiView(generics.ListAPIView):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
+
+    def get_queryset(self):
+        pk = self.kwargs.get('pk')
+        if not pk:
+            return Tag.objects.all()
+        else:
+            return Post.objects.filter(tags__pk=self.kwargs['pk'])
