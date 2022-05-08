@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os.path
 from pathlib import Path
+import os
 #admin djangoadmin pass djangoadmin
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,10 +21,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-=@9a_(o%hwg1hpq%&z@licjsp@)80s!v9*95nyp)k@e29es5o%'
-
+#SECRET_KEY = 'django-insecure-=@9a_(o%hwg1hpq%&z@licjsp@)80s!v9*95nyp)k@e29es5o%'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'django-insecure-=@9a_(o%hwg1hpq%&z@licjsp@)80s!v9*95nyp)k@e29es5o%')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+#DEBUG = True
+DEBUG = bool(os.environ.get('DJANGO_DEGUB', True))
 
 ALLOWED_HOSTS = []
 
